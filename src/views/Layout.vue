@@ -72,9 +72,9 @@ export default {
     // 注意：原代码中这段逻辑有误，如果当前路径不是根路径，会强制跳转到根路径
     // 这通常不是期望的行为，除非是为了强制主页。但为了不改动太多，暂时保留。
     // 如果你想让 Layout.vue 只作为布局组件，不参与路由跳转，可以移除或注释掉这部分。
-    if (this.$route.path !== '/') {
-      this.$router.push('/');
-    }
+    // if (this.$route.path !== '/') {
+    //   this.$router.push('/');
+    // }
   },
 };
 </script>

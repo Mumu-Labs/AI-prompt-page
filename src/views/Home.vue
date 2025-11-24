@@ -1,30 +1,19 @@
 <template>
   <el-card class="home-card">
     <p class="intro-text">这里是您的AI提示词库，汇集了多种场景下的提示词模板。</p>
-    <p class="intro-text">您可以浏览、复制并使用这些提示词于各种大模型中，如豆包等，以激发创意或获取精准结果。</p>
+    <p class="intro-text">您可以复制这些提示词到各种大模型中，如豆包 、Kimi等，快速生成您所需的图片。</p>
 
     <el-row :gutter="20" style="margin-top: 30px;">
       <!-- 图生图提示词 -->
       <el-col class="home-col" :span="24">
         <el-card @click.native="routerJump('image-to-image')" shadow="hover" class="feature-card">
-          <div slot="header" class="card-header">
-            <span class="card-title">🖼️ 图生图提示词</span>
-          </div>
-          <div class="card-content">
-            <p>利用特定的提示词优化图片生成过程，无论是风格转换还是细节增强，这里都有合适的提示词供您参考使用。</p>
-          </div>
+          <span>🖼️ 图生图提示词</span>
         </el-card>
       </el-col>
       <!-- 文生图提示词 -->
       <el-col class="home-col" :span="24">
         <el-card @click.native="routerJump('text-to-image')" shadow="hover" class="feature-card">
-          <div slot="header" class="card-header">
-            <span class="card-title">📋文生图提示词</span>
-          </div>
-          <div class="card-content">
-            <p>探索各类文本生成图像的提示词，帮助您创造出视觉上的艺术作品。</p>
-            <p>选择一个提示词，复制并粘贴到您喜爱的大模型应用中尝试吧！</p>
-          </div>
+          <span>📋文生图提示词</span>
         </el-card>
       </el-col>
 
@@ -103,9 +92,8 @@ export default {
   border-radius: 10px; /* 圆角 */
   border: 1px solid #e0e0e0; /* 边框 */
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑过渡 */
-  background-color: #ffffff; /* 白色背景 */
   /* 可选：添加背景渐变 */
-  /* background: linear-gradient(to bottom, #ffffff, #f8f8f8); */
+  background: linear-gradient(to bottom, #ffffff, #f8f8f8);
 }
 
 .feature-card:hover {
@@ -122,7 +110,6 @@ export default {
   align-items: center; /* 垂直居中 */
   padding: 15px 20px; /* 内边距 */
   background-color: #f8f9fa; /* 浅灰色背景 */
-  border-bottom: 1px solid #e0e0e0; /* 底部分隔线 */
   border-radius: 10px 10px 0 0; /* 仅顶部圆角 */
   /* 可选：添加背景渐变 */
   /* background: linear-gradient(to right, #f8f9fa, #ffffff); */
