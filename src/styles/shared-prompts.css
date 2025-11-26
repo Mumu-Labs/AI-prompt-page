@@ -4,11 +4,12 @@
 
 /* --- 基础变量 (推荐使用 CSS 自定义属性以便统一管理) --- */
 :root {
-    --primary-color: #4caf50; /* 主色调：抹茶绿 */
+    --primary-color: #299b30; /* 主色调：抹茶绿 */
     --primary-light: #81c784; /* 主色调浅色 */
     --primary-dark: #388e3c; /* 主色调深色 */
-    --secondary-color: #f5f5f5; /* 次级背景色：浅灰白 */
-    --accent-color: #dcedc8; /* 强调色：浅绿 */
+    --primary-lightest: #eef8ee; /* 主色调极浅色 (非常浅的绿) */
+    --secondary-color: #d3f4d4; /* 次级背景色：浅灰白 */
+    --accent-color: #e1f1ce; /* 强调色：浅绿 */
     --text-primary: #212121; /* 主要文字颜色 */
     --text-secondary: #757575; /* 辅助文字颜色 */
     --border-color: #e0e0e0; /* 边框颜色 */
@@ -222,6 +223,103 @@ body {
     /* border: 1px solid var(--border-color); */
 }
 
+/* --- 搜索框容器 --- */
+.search-container {
+    /* 可以添加一些间距或背景 */
+     padding: var(--spacing-sm);
+     background-color: var(--primary-lightest);
+     border-radius: var(--radius-md);
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: flex-start; /* 左对齐 */
+    width: 100%; /* 占满容器宽度，便于布局 */
+    margin-top: var(--spacing-sm); /* 与分类标签之间留有间距 */
+}
+
+/* --- 搜索框样式优化 --- */
+.el-input.search-input {
+    /* 保持原有的宽度和基础样式 */
+    width: 300px;
+    /* 可选：移除默认的内边距以更好地控制 */
+     padding: 0;
+    /* 移除默认边框，因为我们会用 CSS 控制 */
+     border: none;
+    /* 可选：添加一个轻微的阴影，使其更突出 */
+    box-shadow: 0 2px 6px var(--shadow-light);
+    /* 设置圆角，与整体设计保持一致 */
+    border-radius: var(--radius-md);
+    /* 使用 CSS 变量统一颜色 */
+    /* border: 1px solid var(--border-color); */ /* 如果需要边框 */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; /* 平滑过渡 */
+    /* 确保在不同状态下都能正确显示 */
+    background-color: var(--white); /* 确保背景色 */
+    /* 为了更好的视觉效果，可以尝试去掉默认的内边距 */
+    /* & input {
+      padding: 0 var(--spacing-md); /* 调整内部文字与边框的距离 */
+    /* } */
+    /* 或者只在聚焦时显示阴影 */
+    /* &:focus-within {
+      box-shadow: 0 0 0 2px var(--primary-color); /* 或者使用 var(--primary-light) */
+    /* } */
+}
+
+/* --- 搜索框聚焦状态 --- */
+.el-input.search-input:focus-within {
+    /* 通过 focus-within 伪类来处理聚焦状态 */
+    box-shadow: 0 0 0 1px var(--primary-color), 0 0 0 1px var(--shadow-light);
+    /* 可选：改变边框颜色 */
+     border-color: var(--primary-color);
+    /* 可选：轻微放大效果 */
+     transform: scale(1.01);
+}
+
+/* --- 搜索框图标 --- */
+.el-input__icon.el-icon-search {
+    /* 可以调整图标的大小和颜色 */
+    font-size: 16px; /* 保持与输入框大小协调 */
+    color: var(--text-secondary); /* 使用辅助文字颜色 */
+    /* 可以添加一点过渡效果 */
+    transition: color 0.3s ease;
+}
+
+/* --- 搜索框输入框 --- */
+.el-input__inner.search-inner {
+    /* 可以调整输入框内部的样式 */
+    padding-left: var(--spacing-md); /* 左侧留白 */
+    padding-right: var(--spacing-md); /* 右侧留白 */
+    border: none; /* 移除默认边框 */
+    background-color: inherit; /* 继承父容器背景色 */
+    /* 可以设置字体大小和颜色 */
+    font-size: 14px; /* 或使用相对单位 */
+    color: var(--text-primary);
+    /* 添加一个轻微的下划线效果，可选 */
+    /* border-bottom: 1px solid var(--border-color); */
+    /* 保持与整体设计的一致性 */
+    /* outline: none; */ /* 移除焦点时的默认轮廓 */
+    /* 也可以添加一个简单的 hover 效果 */
+    /* &:hover {
+      border-color: var(--primary-light);
+    } */
+    /* 聚焦时的样式 */
+    /* &:focus {
+      border-color: var(--primary-color);
+    } */
+}
+
+/* --- 搜索框清除按钮 --- */
+.el-input__suffix .el-input__clear {
+    /* 清除按钮的样式 */
+    color: var(--text-secondary); /* 使用辅助文字颜色 */
+    /* 可以调整大小 */
+    font-size: 14px;
+    /* 可以添加过渡效果 */
+    transition: color 0.3s ease;
+    /* 悬停效果 */
+    &:hover {
+        color: var(--primary-color); /* 悬停时变为主色调 */
+    }
+}
+
 /* --- 响应式设计 --- */
 @media (max-width: 768px) {
     .prompt-card {
@@ -282,6 +380,26 @@ body {
     .category-tags-container {
         gap: var(--spacing-xs);
         margin-top: var(--spacing-sm);
+    }
+
+    /* 响应式搜索框 */
+    .search-container {
+        width: 100%;
+        margin-top: var(--spacing-sm);
+        justify-content: center; /* 在小屏幕下居中 */
+    }
+
+    .el-input.search-input {
+        width: 100%; /* 在小屏幕上占满宽度 */
+        max-width: 300px; /* 设置最大宽度 */
+        /* 为了美观，可以增加一些内边距 */
+        /* padding: var(--spacing-xs) var(--spacing-sm); */
+    }
+
+    .el-input__inner.search-inner {
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
+        font-size: 14px; /* 保持一致 */
     }
 }
 

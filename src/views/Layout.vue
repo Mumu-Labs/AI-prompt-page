@@ -4,7 +4,7 @@
     <el-header class="top-header">
       <div class="header-content">
         <!-- 应用标题，点击可返回主页 -->
-        <h2 class="app-title" @click="goHome">😎沐沐的 AI 提示词工具箱</h2>
+        <h2 class="app-title" @click="goHome">{{ appTitle }}</h2>
 
         <!-- 功能下拉菜单 -->
         <el-dropdown trigger="click" class="dropdown-menu" @command="handleCommand">
@@ -14,7 +14,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="/text-to-image">文生图</el-dropdown-item>
-              <el-dropdown-item command="/image-to-image">图生图</el-dropdown-item>
+              <el-dropdown-item command="/image-to-image">P 图</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -25,10 +25,6 @@
     <div class="main-content">
       <!-- 右侧主要内容区 -->
       <el-main class="main-container">
-        <!-- 页面标题 -->
-        <div class="page-header">
-          <h1>{{ pageTitle }}</h1>
-        </div>
         <!-- 页面内容 -->
         <router-view/>
       </el-main>
@@ -47,10 +43,13 @@ export default {
         case '/text-to-image':
           return '文生图';
         case '/image-to-image':
-          return '图生图';
+          return 'P 图';
         default:
           return 'AI 提示词工具箱';
       }
+    },
+    appTitle() {
+      return this.$route.path === '/' ? ' 😎 沐沐 AI 提示词' : ' ⬅️ 沐沐 AI 提示词';
     },
   },
   methods: {

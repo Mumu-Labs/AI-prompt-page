@@ -2,6 +2,19 @@
   <el-card style="max-width: 100%; margin-bottom: 20px;">
     <div slot="header">
       <h3>📋 文生图 提示词</h3>
+      <!-- 搜索框 -->
+      <div class="search-container">
+        <el-input
+            v-model="searchKeyword"
+            placeholder="搜索提示词标题..."
+            clearable
+            class="search-input"
+            @input="handleSearch"
+        >
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+      </div>
+
       <!-- 分类标签选择 -->
       <div class="category-tags-container">
         <el-tag
@@ -22,24 +35,15 @@
           v-for="item in filteredPromptsData"
           :key="item.id"
           :span="24"
-          style="margin-bottom: 20px;"
-      >
+          style="margin-bottom: 20px;">
         <el-card shadow="hover" class="prompt-card" @click.native="showDetailDialog(item)">
           <div slot="header" class="card-header">
             <span class="category-tag-small">{{ item.category }}</span>
             <!-- 动态显示分类 -->
             <span class="card-title">{{ item.title }}</span>
           </div>
-          <div class="card-content">
-            <p><strong>正面提示词:</strong></p>
-            <!-- 使用计算属性控制显示长度 -->
-            <p>{{ truncatedPrompt(item.prompt) }}</p>
-            <p><strong>负面提示词:</strong></p>
-            <p>{{ truncatedPrompt(item.negativePrompt) }}</p>
-          </div>
-          <div class="card-footer">
-
-          </div>
+          <!-- 使用计算属性控制显示长度 -->
+          <p>{{ truncatedPrompt(item.prompt) }}</p>
         </el-card>
       </el-col>
     </el-row>
@@ -62,7 +66,7 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button type="success" size="small" @click="copyFullPrompt" icon="el-icon-document-copy">
+        <el-button type="success" size="small" @click="copyFullPrompt" icon="el-icon-document-copy" :loading="loading">
           复制
         </el-button>
       </span>
@@ -80,7 +84,7 @@ export default {
     return {
       // 保存原始嵌套结构数据
       promptsData: textToImagePrompts,
-      // 用于存储当前选择分类下的提示词数组
+      // 用于存储当前选择分类下的提示词数组 (过滤后，包含搜索结果)
       filteredPromptsData: [],
       // 用于存储分类选项
       categories: [],
@@ -92,6 +96,10 @@ export default {
       detailItem: {},
       // 复制按钮加载状态
       loading: false,
+      // 搜索关键词
+      searchKeyword: '',
+      // 原始数据（未过滤的），用于搜索
+      originalPromptsData: [], // 新增：存储原始数据以便搜索
     };
   },
   methods: {
@@ -105,26 +113,61 @@ export default {
 
     // 根据选中的分类过滤数据
     filterPrompts(value) {
+      // 获取所有原始数据
+      let allPrompts = [];
+      Object.values(this.promptsData).forEach(categoryArray => {
+        allPrompts = allPrompts.concat(
+            categoryArray.map(item => ({
+              ...item,
+              category: Object.keys(this.promptsData)[Object.values(this.promptsData).indexOf(categoryArray)]
+            }))
+        );
+      });
+
+      // 保存原始数据
+      this.originalPromptsData = allPrompts;
+
+      // 根据分类筛选
+      let filteredByCategory = [];
       if (value === '') {
-        // 如果选择“全部”，则需要一种方式来显示所有数据
-        let allPrompts = [];
-        Object.values(this.promptsData).forEach(categoryArray => {
-          allPrompts = allPrompts.concat(
-              categoryArray.map(item => ({
-                ...item,
-                category: Object.keys(this.promptsData)[Object.values(this.promptsData).indexOf(categoryArray)]
-              }))
-          );
-        });
-        this.filteredPromptsData = allPrompts;
+        // 如果选择“全部”，则使用所有数据
+        filteredByCategory = allPrompts;
       } else {
-        // 获取指定分类下的数据，并添加 category 属性
-        const categoryArray = this.promptsData[value] || []; // 如果找不到分类，返回空数组
-        this.filteredPromptsData = categoryArray.map(item => ({
+        // 获取指定分类下的数据
+        const categoryArray = this.promptsData[value] || [];
+        filteredByCategory = categoryArray.map(item => ({
           ...item,
           category: value
         }));
       }
+
+      // 应用搜索过滤
+      this.applySearchFilter(filteredByCategory);
+    },
+
+    /**
+     * 应用搜索过滤器
+     * @param {Array} baseData - 基础数据（已按分类筛选）
+     */
+    applySearchFilter(baseData) {
+      if (!this.searchKeyword.trim()) {
+        // 如果搜索关键词为空，则显示所有数据
+        this.filteredPromptsData = baseData;
+      } else {
+        // 模糊搜索标题
+        const keyword = this.searchKeyword.toLowerCase().trim();
+        this.filteredPromptsData = baseData.filter(item =>
+            item.title.toLowerCase().includes(keyword)
+        );
+      }
+    },
+
+    /**
+     * 处理搜索事件
+     */
+    handleSearch() {
+      // 确保在分类筛选后再应用搜索
+      this.filterPrompts(this.selectedCategory);
     },
 
     /**
@@ -133,7 +176,7 @@ export default {
      */
     selectCategory(categoryValue) {
       this.selectedCategory = categoryValue;
-      this.filterPrompts(categoryValue);
+      this.filterPrompts(categoryValue); // 重新筛选
     },
 
     // 显示详情弹窗

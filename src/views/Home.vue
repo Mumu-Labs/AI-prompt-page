@@ -4,19 +4,18 @@
     <p class="intro-text">您可以复制这些提示词到各种大模型中，如豆包 、Kimi等，快速生成您所需的图片。</p>
 
     <el-row :gutter="20" style="margin-top: 30px;">
-      <!-- 图生图提示词 -->
-      <el-col class="home-col" :span="24">
-        <el-card @click.native="routerJump('image-to-image')" shadow="hover" class="feature-card">
-          <span>🖼️ 图生图提示词</span>
-        </el-card>
-      </el-col>
       <!-- 文生图提示词 -->
       <el-col class="home-col" :span="24">
         <el-card @click.native="routerJump('text-to-image')" shadow="hover" class="feature-card">
           <span>📋文生图提示词</span>
         </el-card>
       </el-col>
-
+      <!-- P图提示词 -->
+      <el-col class="home-col" :span="24">
+        <el-card @click.native="routerJump('image-to-image')" shadow="hover" class="feature-card">
+          <span>🖼️ P图提示词</span>
+        </el-card>
+      </el-col>
     </el-row>
   </el-card>
 </template>
